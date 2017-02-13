@@ -9,16 +9,20 @@ import FilterableArtistsContainer from './containers/FilterableArtistsContainer'
 import NewPlaylistContainer from './containers/NewPlaylistContainer';
 import PlaylistContainer from './containers/PlaylistContainer';
 import LyricsContainer from './containers/LyricsContainer';
+import StationsContainer from './containers/StationsContainer';
+import StationContainer from './containers/StationContainer';
+
 
 import App from './components/App';
 import Albums from './components/Albums';
 import Songs from './components/Songs';
-
+import Stations from './components/Stations';
+import Station from './components/Station';
 import axios from 'axios';
 import store from './store';
 import {receiveAlbums, getAlbumById} from './action-creators/albums';
 import {receiveArtists, getArtistById} from './action-creators/artists';
-import {receivePlaylists, getPlaylistById} from './action-creators/playlists';
+import {receivePlaylists, getPlaylistById, loadAllSongs} from './action-creators/playlists';
 
 const onAppEnter = function () {
 
@@ -49,6 +53,12 @@ const onPlaylistEnter = function (nextRouterState) {
   store.dispatch(getPlaylistById(playlistId));
 };
 
+const onStationEnter = function (nextRouterState) {
+  store.dispatch(loadAllSongs());
+};
+
+
+
 ReactDOM.render(
   <Provider store={store}>
     <Router history={hashHistory}>
@@ -63,9 +73,12 @@ ReactDOM.render(
         <Route path="/new-playlist" component={NewPlaylistContainer}/>
         <Route path="/playlists/:playlistId" component={PlaylistContainer} onEnter={onPlaylistEnter}/>
         <Route path="/lyrics" component={LyricsContainer} />
+        <Route path="/stations" component={StationsContainer} onEnter={onStationEnter} />
+        <Route path="/stations/:genreName" component={StationContainer} onEnter={onStationEnter} />
         <IndexRedirect to="/albums"/>
       </Route>
     </Router>
   </Provider>,
+
   document.getElementById('app')
 );
